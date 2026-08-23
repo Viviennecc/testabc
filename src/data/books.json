@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "title": "The Midnight Library",
+    "author": "Matt Haig",
+    "genre": "Fantasy",
+    "status": "Available",
+    "publishedYear": 2020,
+    "totalPages": 304,
+    "description": "A novel about all the choices that go into a life well lived.",
+    "isbn": "978-0525559474"
+  },
+  {
+    "id": 2,
+    "title": "The Nordic Theory of Everything",
+    "author": "Anu Partanen",
+    "genre": "Non-fiction",
+    "status": "Available",
+    "publishedYear": 2016,
+    "totalPages": 320,
+    "description": "In search of a better life in the United States and the Nordic countries.",
+    "isbn": "978-0062316547"
+  },
+  {
+    "id": 3,
+    "title": "Beartown",
+    "author": "Fredrik Backman",
+    "genre": "Fiction",
+    "status": "Available",
+    "publishedYear": 2016,
+    "totalPages": 336,
+    "description": "A small town is shattered when a violent act reveals the secrets of its residents.",
+    "isbn": "978-1501160769"
+  },
+  {
+    "id": 4,
+    "title": "Pippi Longstocking",
+    "author": "Astrid Lindgren",
+    "genre": "Children",
+    "status": "Available",
+    "publishedYear": 1945,
+    "totalPages": 240,
+    "description": "The adventures of a supernaturally strong red-haired girl.",
+    "isbn": "978-0142402498"
+  },
+  {
+    "id": 5,
+    "title": "The Girl with the Dragon Tattoo",
+    "author": "Stieg Larsson",
+    "genre": "Thriller",
+    "status": "Available",
+    "publishedYear": 2005,
+    "totalPages": 465,
+    "description": "A dark mystery involving a disgraced journalist and a tattooed computer hacker.",
+    "isbn": "978-0307454546"
+  },
+  {
+    "id": 6,
+    "title": "Smultronstället (Wild Strawberries)",
+    "author": "Ingmar Bergman",
+    "genre": "Drama",
+    "status": "Available",
+    "publishedYear": 1957,
+    "totalPages": 288,
+    "description": "A grumpy old man travels to receive an honorary degree and reflects on his life.",
+    "isbn": "978-1510762411"
+  }
+]

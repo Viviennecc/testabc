@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <body>
+    <script>
+      // 1. Extract the 'code' from the URL query parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const authCode = urlParams.get("code");
+
+      if (authCode) {
+        // 2. Send the code back to your React app
+        window.opener.postMessage(
+          { type: "spotify-code", code: authCode },
+          "*",
+        );
+        window.close();
+      } else {
+        const error = urlParams.get("error");
+        console.error("Authorization failed:", error);
+      }
+    </script>
+  </body>
+</html>
