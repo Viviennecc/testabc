@@ -11,6 +11,7 @@ const Profile = ({ isOpen, onClose, onSave }) => {
     bgValue: "",
     hasChangedUsername: false, // Tracking the one-time change
   });
+  const [error, setError] = useState(""); // Track password policy errors
 
   // Load current user data from localStorage on open
   useEffect(() => {
@@ -25,12 +26,24 @@ const Profile = ({ isOpen, onClose, onSave }) => {
           password: "", // Don't show the encrypted password in the input
         });
       }
+      setError(""); // Reset errors when modal opens
     }
   }, [isOpen]);
 
   if (!isOpen) return null;
 
+  // Validate high-security password configuration
+  const validatePassword = (pwd) => {
+    if (pwd.length < 14) return false;
+    const hasUpperCase = /[A-Z]/.test(pwd);
+    const hasLowerCase = /[a-z]/.test(pwd);
+    const hasNumber = /[0-9]/.test(pwd);
+    const hasSymbol = /[^A-Za-z0-9]/.test(pwd);
+    return hasUpperCase && hasLowerCase && hasNumber && hasSymbol;
+  };
+
   const handleUpdate = async () => {
+    setError("");
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     const currentUserName = localStorage.getItem("currentUser");
 
@@ -39,7 +52,7 @@ const Profile = ({ isOpen, onClose, onSave }) => {
     if (userIndex !== -1) {
       const updatedUser = { ...users[userIndex] };
 
-      // Update basic info
+      // Update basic info (Removed read-only/disabled blockers)
       updatedUser.email = profileData.email;
       updatedUser.dateOfBirth = profileData.dateOfBirth;
 
@@ -53,8 +66,14 @@ const Profile = ({ isOpen, onClose, onSave }) => {
         localStorage.setItem("currentUser", updatedUser.username); // Update session
       }
 
-      // Logic: Update password if provided
-      if (profileData.password && profileData.password.length >= 4) {
+      // Logic: Update password if provided, with validation
+      if (profileData.password) {
+        if (!validatePassword(profileData.password)) {
+          setError(
+            "Password must be 14+ characters with uppercase, lowercase, numbers, and symbols.",
+          );
+          return;
+        }
         updatedUser.password = await encryptData(profileData.password);
       }
 
@@ -102,12 +121,24 @@ const Profile = ({ isOpen, onClose, onSave }) => {
       color: "#666",
       cursor: "not-allowed",
     },
+    errorBlock: {
+      backgroundColor: "#fde8e8",
+      color: "#e11d48",
+      padding: "10px",
+      borderRadius: "4px",
+      fontSize: "0.85rem",
+      marginBottom: "15px",
+      border: "1px solid #f87171",
+    },
   };
 
   return (
     <div style={styles.overlay} onClick={onClose}>
       <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
         <h2 style={{ textAlign: "center" }}>User Profile</h2>
+
+        {/* Error Alert Display */}
+        {error && <div style={styles.errorBlock}>{error}</div>}
 
         {/* Login Name - Always Read Only */}
         <div style={styles.field}>
@@ -143,37 +174,41 @@ const Profile = ({ isOpen, onClose, onSave }) => {
           )}
         </div>
 
+        {/* Email Address - Made Editable */}
         <div style={styles.field}>
           <label style={styles.label}>Email Address</label>
           <input
             type="email"
-            value={profileData.email}
+            value={profileData.email || ""}
             onChange={(e) =>
               setProfileData({ ...profileData, email: e.target.value })
             }
-            style={{ ...styles.input, ...styles.readOnly }}
+            style={styles.input}
           />
         </div>
 
+        {/* Date of Birth - Made Editable */}
         <div style={styles.field}>
           <label style={styles.label}>Date of Birth</label>
           <input
             type="date"
-            value={profileData.dateOfBirth}
+            value={profileData.dateOfBirth || ""}
             onChange={(e) =>
               setProfileData({ ...profileData, dateOfBirth: e.target.value })
             }
-            style={{ ...styles.input, ...styles.readOnly }}
+            style={styles.input}
           />
         </div>
 
+        {/* New Password */}
         <div style={styles.field}>
           <label style={styles.label}>
             New Password (Leave blank to keep current)
           </label>
           <input
             type="password"
-            placeholder="Min 4 characters"
+            placeholder="Must be 14+ characters with uppercase, lowercase, numbers, and symbols."
+            value={profileData.password || ""}
             onChange={(e) =>
               setProfileData({ ...profileData, password: e.target.value })
             }
